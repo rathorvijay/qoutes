@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show quots</title>
+    <style>
+        .loading{
+            display: none;
+            padding:10px 0px;
+
+        }
+        .loading.active{
+            display: block;
+        }
+        *{
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+        .wrapper{
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: aquamarine;
+        }
+        .main{
+            width: 30%;
+            height: fit-content;
+            background-color: rgba(0, 255, 119, 0.456);
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .author{
+            text-align: right;
+            padding: 20px 0px;
+            color:black;
+        }
+        .quote{
+            padding: 20px 0px;
+        }
+        /* Style the submit button */
+.btn {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="main">
+            <h1>quote of the day</h1>
+            <div class="quote"></div>
+            <div class="author"></div>
+            <div class="loading">Loading.....</div>
+            <button class="btn">New quote</button>
+        </div>
+    </div>
+    <script>
+        const quote=document.querySelector(".quote");
+        const author=document.querySelector(".author");
+        const btn=document.querySelector(".btn");
+        const loading=document.querySelector(".loading");
+
+        const insertfun=(data)=>{
+            //console.log("insertfun");
+            const quoteoftheday=data.content;
+            const authorquote=data.author;
+            quote.innerHTML=quoteoftheday;
+            author.innerHTML="Author :- "+authorquote;
+        }
+
+        const quotefun = async ()=>{
+            //console.log("quotefun");
+            loading.classList.add("active");
+            try{
+                quote.innerHTML="";
+                author.innerHTML="";
+                const url=`https://api.quotable.io/random`;
+                const jsonformatedata= await fetch(url);
+                const data= await jsonformatedata.json();
+                console.log(data);
+                loading.classList.remove("active");
+                insertfun(data);
+            }catch(error){
+                console.log(error);
+            }
+        }
+
+        quotefun();
+
+        btn.addEventListener("click",()=>{
+               quotefun();
+        })
+
+    </script>
+</body>
+</html>
